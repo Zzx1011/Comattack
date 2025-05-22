@@ -101,14 +101,14 @@ class ICAE(torch.nn.Module):
         self.model_name = model_args.model_name_or_path
         if self.model_name == 'mistralai/Mistral-7B-Instruct-v0.2':
             # self.icae = AutoModelForCausalLM.from_pretrained('/root/Compression_attack/models/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16, use_flash_attention_2=True, resume_download=True)
-            self.icae = AutoModelForCausalLM.from_pretrained('/root/Compression_attack/models/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16, resume_download=True)
+            self.icae = AutoModelForCausalLM.from_pretrained('/root/models/Mistral-7B-Instruct-v0.2/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16, use_flash_attention_2=True,resume_download=True)
         
         self.training = self.model_args.train    
         
         if self.model_name == 'mistralai/Mistral-7B-Instruct-v0.2':
             if self.training:    # indepedent model for gradient checkpointing
                 # self.decoder = AutoModelForCausalLM.from_pretrained('/root/Compression_attack/models/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16, use_flash_attention_2=True, resume_download=True)
-                self.decoder = AutoModelForCausalLM.from_pretrained('/root/Compression_attack/models/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16,  resume_download=True)
+                self.decoder = AutoModelForCausalLM.from_pretrained('/root/models/Mistral-7B-Instruct-v0.2/Mistral-7B-Instruct-v0.2', torch_dtype=torch.float16 if training_args.bf16 is False else torch.bfloat16,  use_flash_attention_2=True,resume_download=True)
 
         self.vocab_size = self.icae.config.vocab_size + 1    # [PAD] token
         self.pad_token_id = self.vocab_size - 1
@@ -137,7 +137,7 @@ class ICAE(torch.nn.Module):
         self.memory_token_embed = nn.Embedding(self.mem_size + 3, self.dim, padding_idx=None)
         self.loss_fct = nn.CrossEntropyLoss(ignore_index=-100)
         if self.model_name == 'mistralai/Mistral-7B-Instruct-v0.2':
-            self.tokenizer = AutoTokenizer.from_pretrained('/root/Compression_attack/models/Mistral-7B-Instruct-v0.2', use_fast=False)
+            self.tokenizer = AutoTokenizer.from_pretrained('/root/models/Mistral-7B-Instruct-v0.2/Mistral-7B-Instruct-v0.2', use_fast=False)
         self.append_sequence = torch.arange(self.vocab_size, self.vocab_size + self.mem_size, dtype=torch.long, device=device).unsqueeze(0)    # mem tokens
         
         if self.training:

@@ -14,4 +14,4 @@ mean_compression_rate=4
 
 # ICAE_MODEL_PATH=$1 # ICAE model to use; wget "https://huggingface.co/sggetao/icae/resolve/main/mistral_7b_pretrained_icae.safetensors"
 ICAE_MODEL_PATH='/root/models/mistral_7b_ft_icae.safetensors'
-python icae_attack.py --mean_compression_rate $mean_compression_rate --model_max_length $maxlen --fixed_mem_size $mem --lora_r $r --output_dir $ICAE_MODEL_PATH --model_name_or_path $BASE_MODEL --bf16 --train False
+python icae_attack_recommend.py --mean_compression_rate $mean_compression_rate --model_max_length $maxlen --fixed_mem_size $mem --lora_r $r --output_dir $ICAE_MODEL_PATH --model_name_or_path $BASE_MODEL --bf16 --train False
